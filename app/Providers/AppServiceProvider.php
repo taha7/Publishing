@@ -19,7 +19,10 @@ class AppServiceProvider extends ServiceProvider
 
         /** This will not triggered untill loading views */
         \View::composer('*', function ($view) {
-            $view->with('channels', \App\Channel::all());
+            $channels = \Cache::rememberForever('channels', function () {
+                return \App\Channel::all();
+            });
+            $view->with('channels', $channels);
         });
 
         /** this will run before any thing */
@@ -34,5 +37,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        if($this->app->isLocal()) {
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+        }
     }
 }

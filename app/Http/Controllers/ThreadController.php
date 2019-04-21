@@ -87,6 +87,11 @@ class ThreadController extends Controller
      */
     public function show($channelId, Thread $thread)
     {
+        // many ways to load replies and replies favourites and owner
+        // return $thread->load('replies.favourites')->load('replies.owner');
+        
+        // return $thread->replies;
+
         return view('threads.show', [
             'thread' => $thread,
             'replies' => $thread->replies()->paginate(10)
@@ -122,8 +127,17 @@ class ThreadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($channel, Thread $thread)
     {
-        //
+        $this->authorize('update', $thread);
+
+        $thread->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+
+        return redirect('/threads');
+
     }
 }

@@ -19,7 +19,7 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_browse_a_thread()
+    public function a_user_can_browse_threads()
     {
         
         // When I visit
