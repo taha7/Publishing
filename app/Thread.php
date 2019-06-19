@@ -12,7 +12,8 @@ class Thread extends Model
     protected $guarded = [];
     protected $with = ['creator', 'channel'];
 
-    protected static function boot () {
+    protected static function boot()
+    {
         parent::boot();
 
         static::addGlobalScope('replyCount', function ($query) {
@@ -20,11 +21,17 @@ class Thread extends Model
         });
 
         static::deleting(function ($thread) {
-            $thread->replies()->delete();
+            // $thread->replies()->delete(); will not fire event for each one such (deleting activity)
+
+            // $thread->replies->each(function ($reply) {
+            //     $reply->delete();
+            // });
+
+            $thread->replies->each->delete();
         });
     }
 
-    
+
     public function path()
     {
         return "/threads/{$this->channel->slug}/{$this->id}";
@@ -34,7 +41,7 @@ class Thread extends Model
     {
         $this->replies()->create($reply);
     }
-    
+
     /**
      * ========= Relationships ========== *
      */
@@ -50,11 +57,13 @@ class Thread extends Model
         return $this->hasMany(Reply::class);
     }
 
-    public function channel () {
+    public function channel()
+    {
         return $this->belongsTo('App\Channel');
     }
 
-    public function scopeFilter($query, $filters) {
+    public function scopeFilter($query, $filters)
+    {
         return $filters->apply($query);
-    } 
+    }
 }
