@@ -43,7 +43,7 @@ class ThreadController extends Controller
         return $threads->get();
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -68,15 +68,16 @@ class ThreadController extends Controller
             'body' => 'required',
             'channel_id' => 'required|exists:channels,id'
         ]);
-        
+
         $thread = Thread::create([
             'user_id' => auth()->id(),
-            'channel_id' => request('channel_id') ,
+            'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body')
         ]);
 
-        return redirect($thread->path());
+        return redirect($thread->path())
+            ->with('flash', 'your thread has been published!');
     }
 
     /**
@@ -89,7 +90,7 @@ class ThreadController extends Controller
     {
         // many ways to load replies and replies favourites and owner
         // return $thread->load('replies.favourites')->load('replies.owner');
-        
+
         // return $thread->replies;
 
         return view('threads.show', [
@@ -138,6 +139,5 @@ class ThreadController extends Controller
         }
 
         return redirect('/threads');
-
     }
 }

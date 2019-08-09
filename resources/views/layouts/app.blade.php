@@ -18,10 +18,12 @@
         body {
             padding-bottom: 100px;
         }
+
         .level {
             display: flex;
             align-items: center;
         }
+
         .flex {
             flex: 1;
         }
@@ -33,6 +35,7 @@
         @include('layouts.nav')
 
         @yield('content')
+        <flash message="{{ session('flash') }}"></flash>
     </div>
 
     <!-- Scripts -->
