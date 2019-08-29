@@ -10,14 +10,19 @@ class Reply extends Model
 
     protected $guarded = [];
     protected $with = ['owner', 'favourites'];
-    
+
     public function owner()
     {
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function thread () {
+    public function thread()
+    {
         return $this->belongsTo('App\Thread');
     }
 
+    public function path()
+    {
+        return $this->thread->path() . "#reply-{$this->id}";
+    }
 }

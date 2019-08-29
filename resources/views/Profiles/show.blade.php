@@ -9,15 +9,17 @@
                     {{$profileUser->name}}
                 </h1>
             </div>
-            
+
             @foreach ($grouped_activities as $date => $activities)
-                <h3 class="page-header"> {{ $date }} </h3>
-                @foreach ($activities as $activity)
-                    @include("profiles.activities.{$activity->type}")
-                @endforeach
+            <h3 class="page-header"> {{ $date }} </h3>
+            @foreach ($activities as $activity)
+            @if(view()->exists("profiles.activities.{$activity->type}"))
+            @include("profiles.activities.{$activity->type}")
+            @endif
             @endforeach
-        
-            {{-- {{ $threads->links() }}   --}}
+            @endforeach
+
+            {{-- {{ $threads->links() }} --}}
         </div>
     </div>
 </div>

@@ -1,9 +1,9 @@
-<div class="panel panel-warning">
+<div id="reply-{{ $reply->id }}" class="panel panel-warning">
     <div class="panel-heading">
         <div class="level">
             <h5 class="flex">
                 <a href="#">
-                    {{$reply->owner->name}} 
+                    {{$reply->owner->name}}
                 </a> said {{$reply->created_at->diffForHumans()}}
             </h5>
             <form method="POST" action="/replies/{{$reply->id}}/favourites">
