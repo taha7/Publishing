@@ -20,7 +20,7 @@ class FavouritesTest extends TestCase
     public function auth_can_favourite_any_reply()
     {
         $this->signIn();
-        
+
         $reply = create('App\Reply');
 
         $this->post('replies/' . $reply->id . '/favourites');
@@ -29,19 +29,32 @@ class FavouritesTest extends TestCase
     }
 
     /** @test */
-    public function an_auth_may_only_favourite_a_reply_once () {
+    public function auth_can_unfavourite_any_reply()
+    {
         $this->signIn();
-        
+
+        $reply = create('App\Reply');
+
+        $reply->favourite();
+
+        $this->delete('replies/' . $reply->id . '/favourites');
+        $this->assertCount(0, $reply->favourites);
+    }
+
+    /** @test */
+    public function an_auth_may_only_favourite_a_reply_once()
+    {
+        $this->signIn();
+
         $reply = create('App\Reply');
 
         try {
             $this->post('replies/' . $reply->id . '/favourites');
-            $this->post('replies/' . $reply->id . '/favourites');            
+            $this->post('replies/' . $reply->id . '/favourites');
         } catch (\Exception $e) {
             $this->fail('You are make a favourite twice');
         }
 
         $this->assertCount(1, $reply->favourites);
-        
     }
 }
