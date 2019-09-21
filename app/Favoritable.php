@@ -4,12 +4,24 @@ namespace App;
 
 trait Favoritable
 {
+    protected static function bootFavoritable () {
+        static::deleting(function ($model) {
+            $model->favourites->each->delete();
+        });
+    }
 
+    /**
+     * A model can be favourited
+     * @return MorphMany
+     */
     public function favourites()
     {
         return $this->morphMany(Favourite::class, 'favourited');
     }
 
+    /**
+     * persist favourite for the model
+     */
     public function favourite()
     {
         $attributes = ['user_id' => auth()->id()];
