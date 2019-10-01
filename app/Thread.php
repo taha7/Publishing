@@ -37,9 +37,14 @@ class Thread extends Model
         return "/threads/{$this->channel->slug}/{$this->id}";
     }
 
+    /**
+     * Add Reply to the thread
+     * @param array $reply
+     * @return Reply
+     */
     public function addReply($reply)
     {
-        $this->replies()->create($reply);
+        return $this->replies()->create($reply);
     }
 
     /**
