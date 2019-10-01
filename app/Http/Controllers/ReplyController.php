@@ -10,17 +10,32 @@ class ReplyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['index']);
     }
+
+    /**
+     *  get paginated replies for a given thread
+     * @param [int] $channelId
+     * @param Thread $thread
+     * @return Paginate 
+     */
+    public function index ($channelId, Thread $thread) {
+        return $thread->replies()->paginate(20);
+    }
+
     //
     public function store($channelId, Thread $thread)
     {
         $this->validate(request(), ['body' => 'required']);
 
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
         ]);
+
+        if(request()->expectsJson()) {
+            return $reply->load('owner');
+        }
 
         return back()->with('flash', 'Your reply has been left');
     }
